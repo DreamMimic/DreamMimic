@@ -1,4 +1,6 @@
-## Hi there 👋
+## [IROS2026] DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model
+
+Codes coming soon!
 
 <!--
 **DreamMimic/DreamMimic** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
