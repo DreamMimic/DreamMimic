@@ -1,0 +1,18 @@
+_base_: dm_ref_train.yaml
+
+env:
+  numEnvs: 64
+  stateInit: Start
+  enableEvaluation: true
+  useStudentRewardCurriculum: false
+  worldModel:
+    replay_capacity: 32
+    train_after_warmup_steps: 100000000
+    train_steps_per_epoch: 0
+
+sensor:
+  visualize: false
+  enable_realtime_vis: false
+  vis_fps: 5
+  vis_env_id: 0
+  vis_scale: 4

@@ -1,0 +1,151 @@
+_base_: omomo_g1_29dof_with_hand.yaml
+
+env:
+  numEnvs: 1024
+  teacherObsSize: 2153
+  removePrivilegedObs: true
+  teacherPolicy: ckpts/teacher_g1
+  teacherPolicyCFG: dreammimic/data/cfg/train/rlg/omomo_g1_29dof_with_hand.yaml
+  rewardWeights:
+    p: 30.0
+    r: 2.5
+    pv: 0.0
+    rv: 0.0
+    op: 5.0
+    or: 0.1
+    opv: 0.1
+    orv: 0.0
+    ig: 5.0
+    cg1: 3.0
+    cg2: 3.0
+    eg1: 2.0e-05
+    eg2: 2.0e-05
+    eg3: 1.0e-09
+  studentRefGoal:
+    enabled: true
+    horizons:
+    - 1
+    - 16
+  worldModel:
+    prop_dim: 969
+    image_h: 32
+    image_w: 32
+    image_c: 2
+    dyn_deter: 128
+    dyn_hidden: 128
+    dyn_stoch: 32
+    dyn_discrete: 8
+    units: 256
+    encoder:
+      mlp_keys: .*
+      cnn_keys: image
+      act: SiLU
+      norm: true
+      cnn_depth: 16
+      kernel_size: 4
+      minres: 4
+      mlp_layers: 3
+      mlp_units: 256
+      symlog_inputs: true
+    decoder:
+      mlp_keys: .*
+      cnn_keys: image
+      act: SiLU
+      norm: true
+      cnn_depth: 16
+      kernel_size: 4
+      minres: 4
+      mlp_layers: 3
+      mlp_units: 256
+      cnn_sigmoid: false
+      image_dist: mse
+      vector_dist: symlog_mse
+      outscale: 1.0
+    model_lr: 1e-4
+    batch_size: 8
+    batch_length: 16
+    replay_capacity: 64
+    train_after_warmup_steps: 8192
+    train_steps_per_epoch: 2
+    image_on_cpu: true
+    replay_on_cpu: true
+    use_fullheads: true
+    use_privileged_head: true
+    use_contact_head: true
+    use_object_state_head: true
+    privi_dim: 170
+    contact_dim: 1
+    object_state_dim: 13
+    reward_head:
+      layers: 2
+      dist: normal
+      loss_scale: 1.0
+      outscale: 1.0
+    privileged_head:
+      layers: 3
+      dist: normal
+      loss_scale: 1.0
+      outscale: 1.0
+    contact_head:
+      layers: 2
+      dist: normal
+      loss_scale: 1.0
+      outscale: 1.0
+    object_state_head:
+      layers: 3
+      dist: normal
+      loss_scale: 1.0
+      outscale: 1.0
+    grad_heads:
+    - decoder
+    - reward
+    - privileged
+    - contact
+    - object_state
+    use_head_outputs_in_obs: true
+    policy_head_outputs:
+    - reward
+    - privileged
+    - contact
+    - object_state
+
+sensor:
+  enableCamera: true
+  visual_input_type: depth_seg
+  segmentation_id: 2
+  onboard_camera:
+    position:
+    - 0.1
+    - 0.0
+    - 0.0
+    rotation:
+    - 0.0
+    - 0.0
+    - 0.0
+    resolution:
+    - 80
+    - 60
+    horizontal_fov: 110
+    attach_link: d435_link
+  resized_resolution:
+  - 32
+  - 32
+  visualize: false
+  enable_realtime_vis: false
+
+sim:
+  substeps: 2
+  physx:
+    num_threads: 4
+    solver_type: 1
+    num_position_iterations: 4
+    num_velocity_iterations: 1
+    contact_offset: 0.02
+    rest_offset: 0.0
+    bounce_threshold_velocity: 0.2
+    max_depenetration_velocity: 100.0
+    default_buffer_size_multiplier: 5.0
+    max_gpu_contact_pairs: 1048576
+  flex:
+    num_inner_iterations: 10
+    warm_start: 0.25

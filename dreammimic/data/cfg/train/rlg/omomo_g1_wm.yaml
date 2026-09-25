@@ -1,0 +1,198 @@
+params:
+  seed: -1
+
+  algo:
+    name: intermimic_wm_g1
+
+  model:
+    name: intermimic_wm_g1
+
+  network:
+    name: intermimic_wm_g1
+    separate: True
+    
+    # World Model configuration - aligned with SMPLX
+    use_world_model: True
+    world_model_config:
+      # World Model architecture
+      dyn_stoch: 32
+      dyn_deter: 200
+      dyn_hidden: 200
+      dyn_rec_depth: 1
+      dyn_discrete: 0
+      dyn_mean_act: 'none'
+      dyn_std_act: 'softplus'
+      dyn_min_std: 0.1
+      unimix_ratio: 0.01
+      initial: 'learned'
+      num_actions: 43  # G1 has 43 DOF
+      
+      # Encoder config - same options as SMPLX
+      encoder:
+        visual_backbone: 'cnn'  # Options: 'cnn' (default), 'resnet18', 'resnet34'
+        visual_input_type: 'depth_seg'  # Options: 'rgb', 'depth', 'segmentation', 'depth_seg' (default)
+        visual_feature_dim: 512  # Output dimension for visual encoder (used when visual_backbone is resnet18/resnet34)
+        mlp_keys: '.*'
+        cnn_keys: 'image'
+        act: 'SiLU'
+        norm: True
+        cnn_depth: 32
+        kernel_size: 4
+        minres: 4
+        mlp_layers: 5
+        mlp_units: 1024
+        symlog_inputs: True
+      
+      # Multi-step to privileged mode - same as SMPLX
+      enable_multi_to_privi: True  # Set to True to enable multi-step history -> privileged prediction
+      multi_history_len: 5  # Number of history steps for encoder input
+      
+      # Decoder config (required when enable_multi_to_privi=True)
+      use_decoder: True  # Required for enable_multi_to_privi mode
+      decoder:
+        mlp_keys: '.*'
+        cnn_keys: 'image'
+        act: 'SiLU'
+        norm: True
+        cnn_depth: 32
+        kernel_size: 4
+        minres: 4
+        mlp_layers: 5
+        mlp_units: 1024
+        cnn_sigmoid: False
+        image_dist: 'mse'
+        vector_dist: 'symlog_mse'
+        outscale: 1.0
+      
+      # Privileged information head (required when enable_multi_to_privi=True)
+      privileged_head:
+        layers: 3
+        dist: 'normal'  # 'normal' for continuous, 'symlog_disc' for discrete
+        loss_scale: 1.0
+        outscale: 1.0
+      privi_dim: 170  # G1: target_states(13) + ig(52*3=156) + target_contact(1) = 170
+                      # Will be auto-detected from data if None
+      
+      # Reward head (optional) - same as SMPLX
+      use_reward_head: False  # Set to True to enable reward prediction
+      reward_head:
+        layers: 2
+        dist: 'normal'
+        loss_scale: 1.0
+        outscale: 1.0
+      
+      # Training config - aligned with SMPLX
+      grad_heads: ['decoder', 'reward', 'privileged']  # Include 'privileged' when enable_multi_to_privi=True
+      units: 512
+      act: 'SiLU'
+      norm: True
+      dyn_scale: 0.5
+      rep_scale: 0.1
+      kl_free: 1.0
+      weight_decay: 0.0
+      model_lr: 1e-4
+      opt_eps: 1e-8
+      grad_clip: 1000
+      opt: 'adam'
+      precision: 32
+      
+      # Observation dimensions - G1 specific
+      prop_dim: 1983  # G1 proprioceptive dimension (from config: numObs 8135 - visual 6144 = 1983)
+      
+      # World Model feature dimensions
+      wm_feature_dim: 200  # dyn_deter
+      wm_latent_dim: 32   # Compressed WM features for policy
+    
+    space:
+      continuous:
+        mu_activation: None
+        sigma_activation: None
+        mu_init:
+          name: default
+        sigma_init:
+          name: const_initializer
+          val: -2.9
+        fixed_sigma: True
+        learn_sigma: False
+
+    mlp:
+      units: [1024, 1024, 512]
+      activation: relu
+      d2rl: False
+
+      initializer:
+        name: default
+      regularizer:
+        name: None
+
+  load_checkpoint: False
+
+  config:
+    name: mimic_wm_g1
+    full_experiment_name: g1_student_wm
+    env_name: rlgpu
+    multi_gpu: False
+    ppo: True
+    mixed_precision: False
+    normalize_input: True
+    normalize_value: False
+    reward_shaper:
+      scale_value: 1
+    normalize_advantage: True
+    gamma: 0.99
+    tau: 0.95
+    learning_rate: 2e-5
+    lr_schedule: constant
+    score_to_win: 20000
+    max_epochs: 100000
+    save_best_after: 500
+    save_frequency: 500
+    print_stats: True
+    grad_norm: 1.0
+    entropy_coef: 0.0
+    truncate_grads: False
+    ppo: True
+    e_clip: 0.2
+    horizon_length: 16  # Aligned with SMPLX
+    minibatch_size: 2048  # Aligned with SMPLX
+    mini_epochs: 6  # Aligned with SMPLX
+    critic_coef: 5
+    clip_value: False
+    seq_len: 4
+    bounds_loss_coef: 10
+    expert_loss_coef: 1
+    enable_eps_greedy: False
+    distillation_mode: 'dagger_rl'  # Options: 'dagger_rl' (default), 'dagger_only', 'rl_only' - aligned with SMPLX
+    # resume_from: checkpoints/g1_student_wm/nn/mimic.pth
+    resume_from: None
+    
+    # World Model training config - aligned with SMPLX
+    use_world_model: True
+    world_model_config:
+      dyn_stoch: 32
+      dyn_deter: 200
+      dyn_hidden: 200
+      dyn_rec_depth: 1
+      dyn_discrete: 0
+      dyn_mean_act: 'none'
+      dyn_std_act: 'softplus'
+      dyn_min_std: 0.1
+      unimix_ratio: 0.01
+      initial: 'learned'
+      num_actions: 43  # G1 has 43 DOF
+      prop_dim: 1983   # G1 proprioceptive dimension
+      model_lr: 1e-4
+      opt_eps: 1e-8
+      grad_clip: 1000
+      opt: 'adam'
+      precision: 32
+      dyn_scale: 0.5
+      rep_scale: 0.1
+      kl_free: 1.0
+      weight_decay: 0.0
+    wm_train_interval: 10  # Train world model every N policy updates - aligned with SMPLX
+    wm_train_steps: 1      # Number of world model training steps per interval - aligned with SMPLX
+    wm_batch_size: 16      # World model batch size - aligned with SMPLX
+    wm_batch_length: 64    # World model sequence length - aligned with SMPLX
+    
+    save_intermediate: False

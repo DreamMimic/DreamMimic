@@ -1,0 +1,96 @@
+params:
+  seed: -1
+  algo:
+    name: intermimic_student_wm
+  model:
+    name: intermimic_student_wm
+  network:
+    name: intermimic_student_wm
+    separate: true
+    student_wm:
+      prop_dim: 969
+      wm_feature_dim: 313
+      prop_hidden:
+      - 512
+      - 256
+      prop_feature_dim: 256
+      wm_hidden:
+      - 256
+      - 128
+      wm_latent_dim: 64
+      wm_deter_dim: 128
+      wm_prediction_dim: 185
+      use_transformer: true
+      transformer_dim: 256
+      transformer_heads: 8
+      transformer_layers: 2
+      transformer_ff_dim: 512
+      transformer_dropout: 0.1
+      transformer_pool: mean
+    space:
+      continuous:
+        mu_activation: None
+        sigma_activation: None
+        mu_init:
+          name: default
+        sigma_init:
+          name: const_initializer
+          val: -2.9
+        fixed_sigma: true
+        learn_sigma: false
+    mlp:
+      units:
+      - 512
+      - 256
+      - 256
+      activation: elu
+      d2rl: false
+      initializer:
+        name: default
+      regularizer:
+        name: None
+  load_checkpoint: false
+  config:
+    name: mimic
+    full_experiment_name: g1_student_ref_vis_studentwm_dagger
+    env_name: rlgpu
+    multi_gpu: false
+    ppo: true
+    mixed_precision: false
+    normalize_input: true
+    normalize_value: false
+    reward_shaper:
+      scale_value: 1
+    normalize_advantage: true
+    gamma: 0.99
+    tau: 0.95
+    learning_rate: 2e-5
+    lr_schedule: constant
+    score_to_win: 20000
+    max_epochs: 100000
+    save_best_after: 0
+    save_best_reward: true
+    save_frequency: 500
+    print_stats: true
+    grad_norm: 1.0
+    entropy_coef: 0.0
+    truncate_grads: false
+    e_clip: 0.2
+    horizon_length: 16
+    minibatch_size: 2048
+    mini_epochs: 6
+    critic_coef: 5
+    clip_value: false
+    seq_len: 4
+    bounds_loss_coef: 10
+    expert_loss_coef: 1
+    distillation_mode: dagger_only
+    dagger_studentact_teacher_ratio: 0.25
+    dagger_studentact_rl_start_epoch: 5000
+    enable_eps_greedy: false
+    resume_from: None
+    save_intermediate: false
+    enable_multistep_latent_distill: true
+    latent_distill_coef: 0.1
+    latent_distill_horizon: 3
+    latent_distill_stoch_coef: 0.1

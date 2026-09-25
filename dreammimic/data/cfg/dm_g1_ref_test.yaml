@@ -1,0 +1,12 @@
+_base_: dm_g1_ref_train.yaml
+
+env:
+  numEnvs: 2
+  printResetMotion: true
+
+sensor:
+  visualize: false
+  enable_realtime_vis: true
+  vis_fps: 5
+  vis_env_id: 0
+  vis_scale: 4

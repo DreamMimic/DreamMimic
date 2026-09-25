@@ -1,0 +1,27 @@
+_base_: omomo_g1_29dof_with_hand.yaml
+
+sensor:
+  enableCamera: true
+  visual_input_type: depth_seg
+  segmentation_id: 2
+  onboard_camera:
+    position:
+    - 0.1
+    - 0.0
+    - 0.0
+    rotation:
+    - 0.0
+    - 0.0
+    - 0.0
+    resolution:
+    - 80
+    - 60
+    horizontal_fov: 110
+  resized_resolution:
+  - 32
+  - 32
+  visualize: false
+  enable_realtime_vis: true
+  vis_fps: 5
+  vis_env_id: 0
+  vis_scale: 4
