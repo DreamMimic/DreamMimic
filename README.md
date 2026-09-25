@@ -5,7 +5,6 @@
     <br>
     <strong>IROS 2026 (Accepted)</strong>
     <br>
-    Based on <a href="https://github.com/Sirui-Xu/InterMimic">InterMimic</a>
   </p>
 </p>
 
