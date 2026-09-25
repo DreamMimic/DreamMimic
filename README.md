@@ -13,14 +13,8 @@
   <a href="https://dreammimic.github.io/">
     <img src="https://img.shields.io/badge/Project-Website-green?style=flat&logo=googlechrome&logoColor=white">
   </a>
-  <a href="https://dreammimic.github.io/">
-    <img src="https://img.shields.io/badge/Paper-Coming%20Soon-lightgrey?style=flat&logo=arxiv">
-  </a>
-  <a href="https://dreammimic.github.io/">
-    <img src="https://img.shields.io/badge/Video-Coming%20Soon-lightgrey?style=flat&logo=youtube">
-  </a>
-  <a href="https://github.com/sjtuyinjie/DreamMimic">
-    <img src="https://img.shields.io/badge/GitHub-Code-black?style=flat&logo=github&logoColor=white">
+  <a href="https://arxiv.org/abs/2608.22278">
+    <img src="https://img.shields.io/badge/Paper-arXiv-red?style=flat&logo=arxiv&logoColor=white">
   </a>
 </p>
 
@@ -186,7 +180,11 @@ If you find DreamMimic useful, please cite:
   title={DreamMimic: Learning Visuomotor Whole-Body Loco-Manipulation via World Model},
   author={Yin, Jie and Lai, Xingyu},
   booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  year={2026}
+  year={2026},
+  eprint={2608.22278},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2608.22278}
 }
 ```
 
