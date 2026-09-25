@@ -92,8 +92,6 @@ Notes:
 
 - Teacher checkpoints:
   [Google Drive](https://drive.google.com/drive/folders/1biDUmde-h66vUW4npp8FVo2w0wOcK2_k?usp=sharing)
-- Student checkpoint (example):
-  [Google Drive](https://drive.google.com/file/d/1GNFOjBRmiIIxYtfnG9WvK4fELKnDWroR/view?usp=sharing)
 
 ## 🚀 Commands
 
